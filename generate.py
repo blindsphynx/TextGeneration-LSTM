@@ -10,16 +10,15 @@ def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source-dict', default='char_to_index.json', help='read char_dict from file')
     parser.add_argument('--load-model', default='model_1.pth', help='read model from file')
-    parser.add_argument('--start-text', default='Мы верим в Христа, а они нет. Христос говорил ',
-                        help='start text to generate')
     opt = parser.parse_args()
     return opt
 
 
-def generate(source_dict, load_model, start_text):
+def generate(source_dict, load_model):
+    print("Введите начало текста:")
+    start_text = input()
     source = source_dict
     my_model = load_model
-
     char_to_idx = json.load(open(source))
     idx_to_char = {v: k for k, v in char_to_idx.items()}
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
