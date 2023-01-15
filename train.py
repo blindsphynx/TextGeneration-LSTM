@@ -23,7 +23,6 @@ def text_to_seq(text_sample):
     char_counts = Counter(text_sample)
     char_counts = sorted(char_counts.items(), key=lambda x: x[1], reverse=True)
     sorted_chars = [char for char, _ in char_counts]
-    print(sorted_chars)
     char_to_idx = {char: index for index, char in enumerate(sorted_chars)}
     idx_to_char = {v: k for k, v in char_to_idx.items()}
     sequence = np.array([char_to_idx[char] for char in text_sample])
@@ -91,15 +90,15 @@ def train(source, seq_length, batch, epochs, save_dict_to, save_model_to):
             scheduler.step(mean_loss)
             loss_avg = []
             model.eval()
-            print(f'Epoch: {epoch}')
+        print(f'Epoch: {epoch}')
 
-    # Print model's state_dict
-    print()
-    print("Model's state_dict:")
-    for param_tensor in model.state_dict():
-        print(param_tensor, "\t", model.state_dict()[param_tensor].size())
     torch.save(model.state_dict(), save_model_to)
 
-    # print("Optimizer's state_dict:")
-    # for var_name in optimizer.state_dict():
-    #     print(var_name, "\t", optimizer.state_dict()[var_name])
+
+def main(opt):
+    train(**vars(opt))
+
+
+if __name__ == "__main__":
+    opt = parse_opt()
+    main(opt)
