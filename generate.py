@@ -10,11 +10,12 @@ def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source-dict', default='char_to_index.json', help='read char_dict from file')
     parser.add_argument('--load-model', default='model_1.pth', help='read model from file')
+    parser.add_argument('--prediction-len',  type=int, default=250, help='length of a predicted text')
     opt = parser.parse_args()
     return opt
 
 
-def generate(source_dict, load_model):
+def generate(source_dict, load_model, prediction_len):
     print("Введите начало текста:")
     start_text = input()
     source = source_dict
@@ -27,9 +28,7 @@ def generate(source_dict, load_model):
     model.to(device)
     model.eval()
 
-    prediction_len = 250
     temp = 0.3
-
     hidden = model.init_hidden()
     idx_input = [char_to_idx[char] for char in start_text]
     train = torch.LongTensor(idx_input).view(-1, 1, 1).to(device)
